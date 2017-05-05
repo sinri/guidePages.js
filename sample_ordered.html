@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample of guidePages.js - Ordered</title>
+    <script src="guidePages.js"></script>
+    <style>
+        * {
+            margin:10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Sample of guidePages.js - Ordered</h1>
+<div id="guide_box">
+
+</div>
+<script>
+    var sample_render=function(step_info,step_data){
+        console.log('sample_render',step_info,step_data);
+        var box=document.getElementById("guide_box");
+        var code="<h3>"+step_info.title+"</h3>";
+        code+="<p>"+step_info.desc+"</p>";
+        for(var i=0;i<step_info.attr.length;i++) {
+            code += "<div>";
+            code += step_info.attr[i];
+            code += "<input type='text' value='"+step_data[step_info.attr[i]]+"' id='"+step_info.attr[i]+"'>";
+            code += "</div>";
+        }
+        code+="<hr>";
+        code+="<div>" +
+            "<button onclick='guide.guideCancel()'>Cancel</button> " +
+            (step_info.is_first?"":"<button onclick='guide.previousStep()'>Previous</button>") +
+            "<button onclick='guide.nextStep()'>"+(step_info.is_final?"Finish":"Next")+"</button>" +
+            "</div>";
+        box.innerHTML=code;
+    };
+
+    var guide=GuidePages;
+    guide.init();
+    guide.addOrderedSteps([
+        {
+            step_info:{
+                title:'STEP 1',
+                desc:'One',
+                attr:["1A","1B"]
+            },
+            step_data:{
+                "1A":"",
+                "1B":""
+            },
+            render:sample_render,
+            before_go_previous:function(){
+                console.log('I am before_go_previous');
+            },
+            before_go_next:function(){
+                return {
+                    '1A':document.getElementById("1A").value,
+                    '1B':document.getElementById("1B").value
+                }
+            }
+        },
+        {
+            step_info:{
+                title:'STEP 2',
+                desc:'Two',
+                attr:["2A","2B"]
+            },
+            step_data:{
+                "2A":"",
+                "2B":""
+            },
+            render:sample_render,
+            before_go_previous:function(){
+                console.log('I am before_go_previous');
+            },
+            before_go_next:function(){
+                return {
+                    '2A':document.getElementById("2A").value,
+                    '2B':document.getElementById("2B").value
+                }
+            }
+        }
+    ]);
+    guide.setCancelDelegate(function(){
+        alert('cancel!');
+    });
+    guide.setDoneDelegate(function(request){
+        console.log('done request',request);
+        alert('done!');
+    });
+    guide.start();
+</script>
+</body>
+</html>
