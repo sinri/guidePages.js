@@ -8,11 +8,35 @@
         * {
             margin: 10px;
         }
+
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        #steps_div {
+            border: 1px solid gray;
+        }
+
+        #controller {
+            border-top: 1px solid lightgray;
+        }
+
+        h3 {
+            border-bottom: 1px solid lightgray;
+        }
     </style>
 </head>
 <body>
 <h1>Sample for GuidePages.js Lite</h1>
-<div>
+<div id="steps_div">
     <div id="step1_div" style="display: block;">
         <h3>Step 1</h3>
         <p>First, you should input your personal information here.</p>
@@ -47,9 +71,12 @@
         </div>
     </div>
     <div id="controller">
-        <button onclick="guide.cancel()">CANCEL</button>
-        <button onclick="guide.prev()">PREV</button>
-        <button onclick="guide.next()">NEXT</button>
+        <button id="btn_cancel" onclick="guide.cancel()" class="left">CANCEL</button>
+
+        <button id="btn_next" onclick="guide.next()" class="right">NEXT</button>
+        <button id="btn_prev" onclick="guide.prev()" class="right">PREV</button>
+
+        <div class="clear"></div>
     </div>
 </div>
 <script>
@@ -62,9 +89,38 @@
         alert('cancelled');
     });
     guide.setDoneDelegate(function(){
-        alert('done');
+        var request_name = document.getElementById('input_name').value;
+        var request_company = document.getElementById('input_company').value;
+        var request_type = document.getElementById('input_type').value;
+        var request_plus_call = document.getElementById('input_plus_call').checked;
+        alert('Submit the request:\n' +
+            'Name: ' + request_name + "\n" +
+            "Company: " + request_company + "\n" +
+            "Type: " + request_type + "\n" +
+            (request_plus_call ? 'with PLUS CALL Service' : '')
+        );
     });
-    //guide.next();
+    guide.setStepOverDelegate(function (current_div_id, come_div_id) {
+        if (come_div_id === 'step1_div') {
+            document.getElementById('btn_prev').style.display = 'none';
+        } else {
+            document.getElementById('btn_prev').style.display = 'inline-block';
+        }
+        if (come_div_id === 'step3_div') {
+            document.getElementById('btn_next').innerHTML = 'SUBMIT'
+        } else {
+            document.getElementById('btn_next').innerHTML = 'NEXT';
+        }
+
+        if (current_div_id === 'step3_div' && !come_div_id) {
+            if (!document.getElementById("input_agree_term").checked) {
+                alert('You have to agree the terms, or you should cancel the purchase.');
+                return false;
+            }
+        }
+        return true;
+    });
+    guide.next();
 </script>
 </body>
 </html>
