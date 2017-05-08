@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample for LITE</title>
+    <script src="guidePagesLite.js"></script>
+    <style>
+        * {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Sample for GuidePages.js Lite</h1>
+<div>
+    <div id="step1_div" style="display: block;">
+        <h3>Step 1</h3>
+        <p>First, you should input your personal information here.</p>
+        <div>
+            Name: <input type="text" placeholder="Name" id="input_name">
+        </div>
+        <div>
+            Company: <input type="text" placeholder="Company, Ltd." id="input_company">
+        </div>
+    </div>
+    <div id="step2_div" style="display: none;">
+        <h3>Step 2</h3>
+        <p>Second, you should select the service type you want to purchase.</p>
+        <div>
+            Service Type:
+            <select id="input_type">
+                <option value="Personal">One User for One Year</option>
+                <option value="Team">Ten Users for One Year</option>
+                <option value="Company">Unlimited Users for One Year</option>
+            </select>
+        </div>
+        <div>
+            <input type="checkbox" id="input_plus_call"> Yes, needed the Plus Call Support.
+        </div>
+    </div>
+    <div id="step3_div" style="display: none;">
+        <h3>Step 3</h3>
+        <p>Finally, you must confirm our terms.</p>
+        <textarea readonly="readonly">Some terms here.</textarea>
+        <div>
+            <input type="checkbox" id="input_agree_term"> Know and Agree terms.
+        </div>
+    </div>
+    <div id="controller">
+        <button onclick="guide.cancel()">CANCEL</button>
+        <button onclick="guide.prev()">PREV</button>
+        <button onclick="guide.next()">NEXT</button>
+    </div>
+</div>
+<script>
+    var guide=GuidePagesLite;
+    guide.init();
+    guide.addStep('step1_div');
+    guide.addStep('step2_div');
+    guide.addStep('step3_div');
+    guide.setCancelDelegate(function(){
+        alert('cancelled');
+    });
+    guide.setDoneDelegate(function(){
+        alert('done');
+    });
+    //guide.next();
+</script>
+</body>
+</html>
