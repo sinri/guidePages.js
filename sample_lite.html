@@ -100,7 +100,7 @@
             (request_plus_call ? 'with PLUS CALL Service' : '')
         );
     });
-    guide.setStepOverDelegate(function (current_div_id, come_div_id) {
+    guide.setStepOverDelegate(function (current_div_id, come_div_id, type) {
         if (come_div_id === 'step1_div') {
             document.getElementById('btn_prev').style.display = 'none';
         } else {
@@ -112,7 +112,7 @@
             document.getElementById('btn_next').innerHTML = 'NEXT';
         }
 
-        if (current_div_id === 'step3_div' && !come_div_id) {
+        if (current_div_id === 'step3_div' && !come_div_id && type === 'next') {//submit
             if (!document.getElementById("input_agree_term").checked) {
                 alert('You have to agree the terms, or you should cancel the purchase.');
                 return false;
